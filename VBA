@@ -1,0 +1,78 @@
+Sub A_Repetir_linhas_abaixo_se_col_escolhida_igual()
+
+    ' DEVELOPED BY DEVBITTENCOURT
+    ' EXPLICAÇÃO
+    ' ESSE CODIGO VAI LER O CODIGO DA LINHA ATUAL, COPIAR A LINHA LOGO ABAIXO
+    ' E REPETIR O SERVIÇO COPIADO QUANDO ENCONTRAR O CODIGO IGUAL AO INICIAL
+    
+    Dim numeroLinha As Long
+    Dim celulaAtiva As Range
+    Dim numeroRepeticoes As Integer
+    Dim colunaSelecionada As String
+    Dim colunaNumero As Integer
+    Dim conteudoCelula2 As Variant
+    Dim quantLinhas As Integer
+    
+    
+    ' Perguntar ao usuário quantas vezes deseja repetir as operações
+    numeroRepeticoes = InputBox("DevBittencourt: Quantas vezes deseja repetir as operações?", "Repetições", 1)
+    
+    
+    ' Perguntar ao usuário qual coluna deseja parametrizar
+    colunaSelecionada = InputBox("DevBittencourt: Digite a letra da coluna que deseja parametrizar (ex: A, B, C, etc.):", "Selecione a coluna")
+    ' Converter a letra da coluna para o número correspondente
+    colunaNumero = Columns(colunaSelecionada).Column
+    ' Verificar se a entrada do usuário é válida
+    If colunaNumero < 1 Or colunaNumero > Columns.Count Then
+        MsgBox "Coluna inválida. O programa será encerrado.", vbCritical
+        Exit Sub
+    End If
+    
+    ' Obter a célula ativa
+    Set celulaAtiva = ActiveCell
+    numeroLinha = celulaAtiva.Row
+    ' Obter o conteúdo da célula na coluna F da linha ativa
+    conteudoCelula2 = Trim(Cells(numeroLinha, colunaNumero).Value)
+
+
+    quantLinhas = InputBox("DevBittencourt: Quantas linhas deseja copiar?", "Quantidade de linhas", 1)
+    ActiveCell.Offset(1, 0).Select
+    
+    Set celulaAtiva = ActiveCell
+        numeroLinha = ActiveCell.Row
+        Range(Cells(numeroLinha, 1), Cells(numeroLinha + quantLinhas - 1, Columns.Count)).Select
+        ' Copiar a seleção
+        Selection.Copy
+
+    For i = 1 To numeroRepeticoes
+
+        ' Obter a linha da célula ativa
+        
+        Set celulaAtiva = ActiveCell
+        numeroLinha = ActiveCell.Row
+                
+        ' Obter o conteúdo da célula na coluna F da linha ativa
+        Dim conteudoCelula As Variant
+        conteudoCelula = Trim(Cells(numeroLinha, colunaNumero).Value)
+        
+        If conteudoCelula = conteudoCelula2 Then
+        
+            ' Inserir uma linha abaixo da célula ativa
+            Rows(ActiveCell.Row + 1).Insert Shift:=xlDown
+            
+            ' Mover duas linhas abaixo da célula ativa
+            ActiveCell.Offset(1, 0).Select
+            
+            ' Selecionar e copiar a linha
+            Range(Cells(ActiveCell.Row, 1), Cells(ActiveCell.Row + quantLinhas - 1, Columns.Count)).Select
+            Selection.Copy
+                
+        Else
+            
+        End If
+        
+        ActiveCell.Offset(1, 0).Select
+    
+    Next i
+ 
+End Sub
